@@ -108,7 +108,7 @@ const ShowTickets = () => {
   const handlePayment = async () => {
     const orderId = await createRazorpayOrder();
     if (!orderId) return;
-
+    console.log("Razorpay Key:", import.meta.env.VITE_RAZORPAY_KEY);
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY,
       amount: totalAmount * 100,
