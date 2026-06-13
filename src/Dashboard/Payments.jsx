@@ -17,13 +17,13 @@
 //   useEffect(() => {
 //     const fetchPayments = async () => {
 //       try {
-//         const response = await fetch(`http://localhost:8080/api/payments/${eventId}`);
+//         const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/payments/${eventId}`);
 //         const data = await response.json();
-        
+
 //         if (!response.ok) {
 //           throw new Error(data.message || 'Failed to fetch payments');
 //         }
-        
+
 //         if (!data.success) {
 //           setError(data.message);
 //           setPayments([]);
@@ -164,13 +164,13 @@ const Payments = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/payments/${eventId}`);
+        const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/payments/${eventId}`);
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw new Error(data.message || 'Failed to fetch payments');
         }
-        
+
         if (!data.success) {
           setError(data.message);
           setPayments([]);
@@ -200,7 +200,7 @@ const Payments = () => {
       payments.forEach(payment => {
         stats.totalAmount += payment.amount || 0;
         if (payment._id) stats.completed++;
-        
+
         if (payment.status === 'verified') {
           stats.verifiedAmount += payment.amount || 0;
           stats.verifiedCount++;

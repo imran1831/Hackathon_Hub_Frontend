@@ -26,11 +26,11 @@ const FormBuilder = () => {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.title.trim()) {
       errors.title = 'Form title is required';
     }
-    
+
     if (formData.questions.length === 0) {
       errors.questions = 'At least one question is required';
     } else {
@@ -43,7 +43,7 @@ const FormBuilder = () => {
         }
       });
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -58,17 +58,17 @@ const FormBuilder = () => {
 
   const handleQuestionChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     setCurrentQuestion(prev => {
       const updatedQuestion = {
         ...prev,
         [name]: type === 'checkbox' ? checked : value
       };
-      
+
       if (name === 'fieldType' && !['multiple-choice', 'checkboxes', 'dropdown'].includes(value)) {
         updatedQuestion.options = [];
       }
-      
+
       return updatedQuestion;
     });
   };
@@ -100,24 +100,24 @@ const FormBuilder = () => {
 
   const addQuestion = () => {
     if (currentQuestion.questionText.trim()) {
-      if (['multiple-choice', 'checkboxes', 'dropdown'].includes(currentQuestion.fieldType) && 
-          currentQuestion.options.length < 2) {
+      if (['multiple-choice', 'checkboxes', 'dropdown'].includes(currentQuestion.fieldType) &&
+        currentQuestion.options.length < 2) {
         alert('Please add at least two options for this question type');
         return;
       }
-      
+
       setFormData(prev => ({
         ...prev,
         questions: [...prev.questions, currentQuestion]
       }));
-      
+
       setCurrentQuestion({
         questionText: '',
         fieldType: 'short-answer',
         options: [],
         required: false
       });
-      
+
       if (formErrors.questions) {
         setFormErrors(prev => ({ ...prev, questions: undefined }));
       }
@@ -141,7 +141,7 @@ const FormBuilder = () => {
     e.preventDefault();
     setSubmissionStatus(null);
     setIsSubmitting(true);
-    
+
     if (!validateForm()) {
       setIsSubmitting(false);
       return;
@@ -149,7 +149,7 @@ const FormBuilder = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/events/${eventId}/forms`, 
+        `https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms`,
         {
           title: formData.title,
           description: formData.description,
@@ -158,8 +158,8 @@ const FormBuilder = () => {
         }
       );
 
-      setSubmissionStatus({ 
-        success: true, 
+      setSubmissionStatus({
+        success: true,
         message: 'Form successfully created!',
         formData: response.data.data
       });
@@ -173,9 +173,9 @@ const FormBuilder = () => {
 
     } catch (error) {
       console.error('Error creating form:', error);
-      setSubmissionStatus({ 
-        success: false, 
-        message: error.response?.data?.message || 'Failed to create form' 
+      setSubmissionStatus({
+        success: false,
+        message: error.response?.data?.message || 'Failed to create form'
       });
     } finally {
       setIsSubmitting(false);
@@ -194,7 +194,7 @@ const FormBuilder = () => {
             <p><strong>Description:</strong> {submissionStatus.formData.description || 'None'}</p>
             <p><strong>Number of Questions:</strong> {submissionStatus.formData.questions.length}</p>
           </div>
-          <button 
+          <button
             className="back-btn"
             onClick={() => navigate(`/event/${eventId}/`)}
           >
@@ -208,7 +208,7 @@ const FormBuilder = () => {
   return (
     <div className="form-builder-container">
       <h2>Create New Registration Form for Event #{eventId}</h2>
-      
+
       {submissionStatus && !submissionStatus.success && (
         <div className="alert error">
           {submissionStatus.message}
@@ -239,7 +239,7 @@ const FormBuilder = () => {
 
         <div className="questions-section">
           <h3>Questions {formErrors.questions && <span className="error-text">- {formErrors.questions}</span>}</h3>
-          
+
           {formData.questions.length === 0 ? (
             <p className="no-questions">No questions added yet</p>
           ) : (
@@ -248,21 +248,21 @@ const FormBuilder = () => {
                 <div key={qIndex} className="question-item">
                   <div className="question-header">
                     <span className="question-text">
-                      {qIndex + 1}. {q.questionText} 
+                      {qIndex + 1}. {q.questionText}
                       <span className="question-type">({q.fieldType})</span>
                       {q.required && <span className="required-flag">*</span>}
                     </span>
                     <div className="question-actions">
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         className="edit-btn"
                         onClick={() => editQuestion(qIndex)}
                         title="Edit question"
                       >
                         Edit
                       </button>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         className="delete-btn"
                         onClick={() => removeQuestion(qIndex)}
                         title="Remove question"
@@ -340,7 +340,7 @@ const FormBuilder = () => {
                     {currentQuestion.options.map((opt, optIndex) => (
                       <li key={optIndex}>
                         {opt.text}
-                        <button 
+                        <button
                           type="button"
                           className="delete-btn small"
                           onClick={() => removeOption(optIndex)}
@@ -361,8 +361,8 @@ const FormBuilder = () => {
                     placeholder="Enter option text"
                     onKeyPress={(e) => e.key === 'Enter' && addOption()}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="add-btn"
                     onClick={addOption}
                     disabled={!currentOption.trim()}
@@ -373,8 +373,8 @@ const FormBuilder = () => {
               </div>
             )}
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="add-btn primary"
               onClick={addQuestion}
               disabled={!currentQuestion.questionText.trim()}
@@ -385,15 +385,15 @@ const FormBuilder = () => {
         </div>
 
         <div className="form-actions">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="cancel-btn"
             onClick={() => navigate(`/events/${eventId}/forms`)}
           >
             Cancel
           </button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-btn primary"
             disabled={formData.questions.length === 0 || isSubmitting}
           >

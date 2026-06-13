@@ -37,7 +37,7 @@
 //   useEffect(() => {
 //     const fetchEventData = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:8080/api/event/${id}`);
+//         const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/event/${id}`);
 //         const eventData = response.data;
 
 //         // Set state with fetched event data
@@ -105,7 +105,7 @@
 //     };
 
 //     try {
-//       await axios.put(`http://localhost:8080/api/events/${id}`, eventData);
+//       await axios.put(`https://hackathon-hub-backend.onrender.com/api/events/${id}`, eventData);
 //       navigate(`/event/${id}`);
 //     } catch (error) {
 //       console.error("Error updating event:", error);
@@ -490,7 +490,7 @@ const EditEvent = () => {
   useEffect(() => {
     const fetchEventData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/event/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/event/${id}`);
         const eventData = response.data;
 
         // Set state with fetched event data
@@ -562,7 +562,7 @@ const EditEvent = () => {
     };
 
     try {
-      await axios.put(`http://localhost:8080/api/events/${id}`, eventData);
+      await axios.put(`https://hackathon-hub-backend.onrender.com/api/events/${id}`, eventData);
       navigate(`/event/${id}`);
     } catch (error) {
       console.error("Error updating event:", error);

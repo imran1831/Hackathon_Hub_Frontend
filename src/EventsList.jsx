@@ -12,7 +12,7 @@ const EventsList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/events")
+      .get("https://hackathon-hub-backend.onrender.com/api/events")
       .then((response) => {
         setEvents(response.data);
         setLoading(false);

@@ -11,7 +11,7 @@ const Booking = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+        const userResponse = await fetch(`${import.meta.env.VITE_API_URL}/auth/current-user`, {
           credentials: 'include'
         });
         
@@ -22,7 +22,7 @@ const Booking = () => {
         const userData = await userResponse.json();
         const holderName = userData.user.email;
 
-        const bookingsResponse = await fetch(`http://localhost:8080/api/bookings?holderName=${encodeURIComponent(holderName)}`, {
+        const bookingsResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/bookings?holderName=${encodeURIComponent(holderName)}`, {
           credentials: 'include'
         });
 

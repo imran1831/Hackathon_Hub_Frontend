@@ -22,13 +22,13 @@ const EditRegistrationForm = () => {
   useEffect(() => {
     const fetchFormData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/forms/${formId}`);
+        const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/forms/${formId}`);
         setFormData(response.data);
       } catch (error) {
         console.error('Error fetching form data:', error);
-        setSubmissionStatus({ 
-          success: false, 
-          message: error.response?.data?.message || 'Failed to load form data' 
+        setSubmissionStatus({
+          success: false,
+          message: error.response?.data?.message || 'Failed to load form data'
         });
       } finally {
         setIsLoading(false);
@@ -40,13 +40,13 @@ const EditRegistrationForm = () => {
 
   const validateForm = () => {
     if (!formData) return false;
-    
+
     const errors = {};
-    
+
     if (!formData.title?.trim()) {
       errors.title = 'Form title is required';
     }
-    
+
     if (!formData.questions || formData.questions.length === 0) {
       errors.questions = 'At least one question is required';
     } else {
@@ -54,13 +54,13 @@ const EditRegistrationForm = () => {
         if (!q.questionText?.trim()) {
           errors[`question-${index}`] = 'Question text cannot be empty';
         }
-        if (['multiple-choice', 'checkboxes', 'dropdown'].includes(q.fieldType) && 
-            (!q.options || q.options.length < 2)) {
+        if (['multiple-choice', 'checkboxes', 'dropdown'].includes(q.fieldType) &&
+          (!q.options || q.options.length < 2)) {
           errors[`question-options-${index}`] = 'At least two options are required';
         }
       });
     }
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -75,17 +75,17 @@ const EditRegistrationForm = () => {
 
   const handleQuestionChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     setCurrentQuestion(prev => {
       const updatedQuestion = {
         ...prev,
         [name]: type === 'checkbox' ? checked : value
       };
-      
+
       if (name === 'fieldType' && !['multiple-choice', 'checkboxes', 'dropdown'].includes(value)) {
         updatedQuestion.options = [];
       }
-      
+
       return updatedQuestion;
     });
   };
@@ -118,24 +118,24 @@ const EditRegistrationForm = () => {
   const addQuestion = () => {
     if (!currentQuestion.questionText.trim()) return;
 
-    if (['multiple-choice', 'checkboxes', 'dropdown'].includes(currentQuestion.fieldType) && 
-        currentQuestion.options.length < 2) {
+    if (['multiple-choice', 'checkboxes', 'dropdown'].includes(currentQuestion.fieldType) &&
+      currentQuestion.options.length < 2) {
       alert('Please add at least two options for this question type');
       return;
     }
-    
+
     setFormData(prev => ({
       ...prev,
       questions: [...(prev?.questions || []), currentQuestion]
     }));
-    
+
     setCurrentQuestion({
       questionText: '',
       fieldType: 'short-answer',
       options: [],
       required: false
     });
-    
+
     if (formErrors.questions) {
       setFormErrors(prev => ({ ...prev, questions: undefined }));
     }
@@ -143,7 +143,7 @@ const EditRegistrationForm = () => {
 
   const editQuestion = (index) => {
     if (!formData?.questions?.[index]) return;
-    
+
     const questionToEdit = formData.questions[index];
     setCurrentQuestion(questionToEdit);
     removeQuestion(index);
@@ -160,7 +160,7 @@ const EditRegistrationForm = () => {
     e.preventDefault();
     setSubmissionStatus(null);
     setIsSubmitting(true);
-    
+
     if (!formData || !validateForm()) {
       setIsSubmitting(false);
       return;
@@ -168,7 +168,7 @@ const EditRegistrationForm = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/events/${eventId}/forms/${formId}`,
+        `https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms/${formId}`,
         {
           title: formData.title,
           description: formData.description,
@@ -176,8 +176,8 @@ const EditRegistrationForm = () => {
         }
       );
 
-      setSubmissionStatus({ 
-        success: true, 
+      setSubmissionStatus({
+        success: true,
         message: response.data.message || 'Form updated successfully!',
         formData: response.data
       });
@@ -188,7 +188,7 @@ const EditRegistrationForm = () => {
 
     } catch (error) {
       console.error('Error updating form:', error);
-      
+
       let errorMessage = 'Failed to update form';
       if (error.response) {
         if (error.response.data.errors) {
@@ -198,9 +198,9 @@ const EditRegistrationForm = () => {
         }
       }
 
-      setSubmissionStatus({ 
-        success: false, 
-        message: errorMessage 
+      setSubmissionStatus({
+        success: false,
+        message: errorMessage
       });
     } finally {
       setIsSubmitting(false);
@@ -217,7 +217,7 @@ const EditRegistrationForm = () => {
         <div className="error-text">
           {submissionStatus?.message || 'Failed to load form data'}
         </div>
-        <button 
+        <button
           className="cancel-btn"
           onClick={() => navigate(-1)}
         >
@@ -248,7 +248,7 @@ const EditRegistrationForm = () => {
   return (
     <div className="form-builder-container">
       <h2>Recreate Registration Form</h2>
-      
+
       {submissionStatus && !submissionStatus.success && (
         <div className="alert error">
           {submissionStatus.message}
@@ -281,7 +281,7 @@ const EditRegistrationForm = () => {
           <h3>Questions {formErrors.questions && (
             <span className="error-text">- {formErrors.questions}</span>
           )}</h3>
-          
+
           {!formData.questions || formData.questions.length === 0 ? (
             <p className="no-questions">No questions added yet</p>
           ) : (
@@ -290,21 +290,21 @@ const EditRegistrationForm = () => {
                 <div key={qIndex} className="question-item">
                   <div className="question-header">
                     <span className="question-text">
-                      {qIndex + 1}. {q.questionText} 
+                      {qIndex + 1}. {q.questionText}
                       <span className="question-type">({q.fieldType})</span>
                       {q.required && <span className="required-flag">*</span>}
                     </span>
                     <div className="question-actions">
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         className="edit-btn"
                         onClick={() => editQuestion(qIndex)}
                         title="Edit question"
                       >
                         Edit
                       </button>
-                      <button 
-                        type="button" 
+                      <button
+                        type="button"
                         className="delete-btn"
                         onClick={() => removeQuestion(qIndex)}
                         title="Remove question"
@@ -382,7 +382,7 @@ const EditRegistrationForm = () => {
                     {currentQuestion.options.map((opt, optIndex) => (
                       <li key={optIndex}>
                         {opt.text}
-                        <button 
+                        <button
                           type="button"
                           className="delete-btn small"
                           onClick={() => removeOption(optIndex)}
@@ -403,8 +403,8 @@ const EditRegistrationForm = () => {
                     placeholder="Enter option text"
                     onKeyPress={(e) => e.key === 'Enter' && addOption()}
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="add-btn"
                     onClick={addOption}
                     disabled={!currentOption.trim()}
@@ -415,8 +415,8 @@ const EditRegistrationForm = () => {
               </div>
             )}
 
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="add-btn primary"
               onClick={addQuestion}
               disabled={!currentQuestion.questionText.trim()}
@@ -427,15 +427,15 @@ const EditRegistrationForm = () => {
         </div>
 
         <div className="form-actions">
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="cancel-btn"
             onClick={() => navigate(-1)}
           >
             Cancel
           </button>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-btn primary"
             disabled={!formData.questions || formData.questions.length === 0 || isSubmitting}
           >

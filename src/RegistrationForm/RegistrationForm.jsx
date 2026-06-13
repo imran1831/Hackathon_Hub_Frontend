@@ -27,20 +27,20 @@
 //     const fetchData = async () => {
 //       try {
 //         // 1. Get current user
-//         const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+//         const userResponse = await fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', {
 //           credentials: 'include'
 //         });
-        
+
 //         if (!userResponse.ok) {
 //           throw new Error('Failed to fetch user data');
 //         }
-        
+
 //         const userData = await userResponse.json();
 //         setUser(userData.user?.email || "");
 
 //         // 2. Check for existing submission
 //         const submissionCheck = await axios.post(
-//           'http://localhost:8080/api/check-submission',
+//           'https://hackathon-hub-backend.onrender.com/api/check-submission',
 //           {
 //             eventId: eventId,
 //             username: userData.user?.email
@@ -55,18 +55,18 @@
 //         }
 
 //         // 3. Check ticket type for this event
-//         const ticketResponse = await fetch(`http://localhost:8080/api/tickets/${eventId}`);
-        
+//         const ticketResponse = await fetch(`https://hackathon-hub-backend.onrender.com/api/tickets/${eventId}`);
+
 //         if (!ticketResponse.ok) {
 //           throw new Error('Failed to fetch ticket data');
 //         }
-        
+
 //         const tickets = await ticketResponse.json();
-        
+
 //         if (!tickets || tickets.length === 0) {
 //           throw new Error('No tickets available for this event'); 
 //         }
-        
+
 //         // Get the first ticket's type (assuming one ticket type per event)
 //         const currentTicketType = tickets[0]?.ticketType || 'paid';
 //         setTicketType(currentTicketType);
@@ -74,7 +74,7 @@
 //         // 4. For paid tickets, verify payment status
 //         if (currentTicketType === 'paid') {
 //           const paymentStatusRes = await fetch(
-//             "http://localhost:8080/api/verify-payment-status",
+//             "https://hackathon-hub-backend.onrender.com/api/verify-payment-status",
 //             {
 //               method: "POST",
 //               headers: { "Content-Type": "application/json" },
@@ -91,13 +91,13 @@
 //           }
 
 //           const paymentStatus = await paymentStatusRes.json();
-          
+
 //           if (!paymentStatus.success) {
 //             setError('Payment not verified. Please complete payment first.');
 //             setIsLoading(false);
 //             return;
 //           }
-          
+
 //           setPaymentVerified(true);
 //           setPaymentDetails(paymentStatus.payment);
 //         } else {
@@ -110,8 +110,8 @@
 //         }
 
 //         // 5. Fetch the registration form
-//         const formResponse = await axios.get(`http://localhost:8080/api/events/${eventId}/forms`);
-        
+//         const formResponse = await axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms`);
+
 //         if (formResponse.data.count > 0) {
 //           setForm(formResponse.data.data[0]);
 //           // Initialize form data
@@ -124,7 +124,7 @@
 //         } else {
 //           setError('No registration form found for this event');
 //         }
-        
+
 //         setIsLoading(false);
 //       } catch (err) {
 //         setError(err.message);
@@ -143,7 +143,7 @@
 //     const year = String(date.getFullYear()).slice(-2);
 //     const hours = String(date.getHours()).padStart(2, '0');
 //     const minutes = String(date.getMinutes()).padStart(2, '0');
-    
+
 //     return `${day}-${month}-${year}, ${hours}:${minutes}`;
 //   };
 
@@ -194,7 +194,7 @@
 //       };
 
 //       await axios.post(
-//         `http://localhost:8080/api/responses`,
+//         `https://hackathon-hub-backend.onrender.com/api/responses`,
 //         submissionData,
 //         {
 //           withCredentials: true,
@@ -249,13 +249,13 @@
 //         <div className="success-card">
 //           <h2>🎉 Registration Successful!</h2>
 //           <p>Thank you for registering for this event.</p>
-          
+
 //           {ticketType === 'paid' && paymentDetails && (
 //             <div className="payment-details">
 //               <p><strong>Payment ID:</strong> {paymentDetails.payment_id}</p>
 //             </div>
 //           )}
-          
+
 //           <Link to={`/events/${eventId}`} className="btn btn-primary">
 //             View Event Details
 //           </Link>
@@ -467,20 +467,20 @@ const RegistrationForm = () => {
     const fetchData = async () => {
       try {
         // 1. Get current user
-        const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+        const userResponse = await fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', {
           credentials: 'include'
         });
-        
+
         if (!userResponse.ok) {
           throw new Error('Failed to fetch user data');
         }
-        
+
         const userData = await userResponse.json();
         setUser(userData.user?.email || "");
 
         // 2. Check for existing submission
         const submissionCheck = await axios.post(
-          'http://localhost:8080/api/check-submission',
+          'https://hackathon-hub-backend.onrender.com/api/check-submission',
           {
             eventId: eventId,
             username: userData.user?.email
@@ -495,18 +495,18 @@ const RegistrationForm = () => {
         }
 
         // 3. Check ticket availability for this event
-        const ticketResponse = await fetch(`http://localhost:8080/api/tickets/${eventId}`);
-        
+        const ticketResponse = await fetch(`https://hackathon-hub-backend.onrender.com/api/tickets/${eventId}`);
+
         if (!ticketResponse.ok) {
           throw new Error('Failed to fetch ticket data');
         }
-        
+
         const tickets = await ticketResponse.json();
-        
+
         if (!tickets || tickets.length === 0) {
-          throw new Error('No tickets available for this event'); 
+          throw new Error('No tickets available for this event');
         }
-        
+
         // Check if all tickets are sold out
         const allSoldOut = tickets.every(ticket => ticket.quantity <= ticket.sold);
         if (allSoldOut) {
@@ -522,7 +522,7 @@ const RegistrationForm = () => {
         // 4. For paid tickets, verify payment status
         if (currentTicketType === 'paid') {
           const paymentStatusRes = await fetch(
-            "http://localhost:8080/api/verify-payment-status",
+            "https://hackathon-hub-backend.onrender.com/api/verify-payment-status",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -539,13 +539,13 @@ const RegistrationForm = () => {
           }
 
           const paymentStatus = await paymentStatusRes.json();
-          
+
           if (!paymentStatus.success) {
             setError('Payment not verified. Please complete payment first.');
             setIsLoading(false);
             return;
           }
-          
+
           setPaymentVerified(true);
           setPaymentDetails(paymentStatus.payment);
         } else {
@@ -558,21 +558,21 @@ const RegistrationForm = () => {
         }
 
         // 5. Fetch the registration form
-        const formResponse = await axios.get(`http://localhost:8080/api/events/${eventId}/forms`);
-        
+        const formResponse = await axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms`);
+
         if (formResponse.data.count > 0) {
           setForm(formResponse.data.data[0]);
           // Initialize form data
           const initialFormData = {};
           formResponse.data.data[0].questions.forEach(question => {
-            initialFormData[question._id] = 
+            initialFormData[question._id] =
               question.fieldType === 'checkboxes' ? [] : '';
           });
           setFormData(initialFormData);
         } else {
           setError('No registration form found for this event');
         }
-        
+
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
@@ -591,7 +591,7 @@ const RegistrationForm = () => {
     const year = String(date.getFullYear()).slice(-2);
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    
+
     return `${day}-${month}-${year}, ${hours}:${minutes}`;
   };
 
@@ -642,7 +642,7 @@ const RegistrationForm = () => {
       };
 
       await axios.post(
-        `http://localhost:8080/api/responses`,
+        `https://hackathon-hub-backend.onrender.com/api/responses`,
         submissionData,
         {
           withCredentials: true,
@@ -724,13 +724,13 @@ const RegistrationForm = () => {
         <div className="success-card">
           <h2>🎉 Registration Successful!</h2>
           <p>Thank you for registering for this event.</p>
-          
+
           {ticketType === 'paid' && paymentDetails && (
             <div className="payment-details">
               <p><strong>Payment ID:</strong> {paymentDetails.payment_id}</p>
             </div>
           )}
-          
+
           <Link to={`/event/${eventId}`} className="btn btn-primary">
             <button>View Event Details</button>
           </Link>
@@ -806,7 +806,7 @@ const RegistrationForm = () => {
               Submit Registration
             </button>
             <button>
-              <Link to={"/events/"+eventId+"/edit-form/"+form._id}>ReCreate Form</Link>
+              <Link to={"/events/" + eventId + "/edit-form/" + form._id}>ReCreate Form</Link>
             </button>
           </div>
         </form>

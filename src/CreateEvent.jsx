@@ -69,7 +69,7 @@ const CreateEvent = () => {
   // Submit Event Data
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!user) {
       setError("Please login to create events");
       return;
@@ -101,7 +101,7 @@ const CreateEvent = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/create-event", 
+        "https://hackathon-hub-backend.onrender.com/api/create-event",
         eventData,
         {
           withCredentials: true // Include cookies for authentication
@@ -186,13 +186,13 @@ const CreateEvent = () => {
       {!eventType ? (
         <div className="event-type-selection">
           <h3>Select Event Type</h3>
-          <button 
+          <button
             onClick={() => setEventType("event")}
             className="event-type-btn"
           >
             Create Event
           </button>
-          <button 
+          <button
             onClick={() => setEventType("hackathon")}
             className="event-type-btn"
           >
@@ -210,12 +210,12 @@ const CreateEvent = () => {
             />
             {bannerImage !==
               "https://res.cloudinary.com/dco33etmd/image/upload/v1742632503/kpauanxinnhuhelrq3zw.jpg" && (
-              <img
-                src={bannerImage}
-                alt="Banner Preview"
-                className="banner-preview"
-              />
-            )}
+                <img
+                  src={bannerImage}
+                  alt="Banner Preview"
+                  className="banner-preview"
+                />
+              )}
           </div>
 
           <div className="form-group">
@@ -282,8 +282,8 @@ const CreateEvent = () => {
 
           <div className="form-group">
             <label>Status:</label>
-            <select 
-              value={status} 
+            <select
+              value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
               <option value="upcoming">Upcoming</option>
@@ -309,9 +309,9 @@ const CreateEvent = () => {
             setWhatsappGroup={setWhatsappGroup}
           />
 
-          <button 
-            type="submit" 
-            className="submit-button" 
+          <button
+            type="submit"
+            className="submit-button"
             disabled={isSubmitting || !user}
           >
             {isSubmitting ? "Creating..." : "Create Event"}

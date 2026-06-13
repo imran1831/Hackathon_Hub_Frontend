@@ -12,10 +12,10 @@ const AuthProvider = ({ children }) => {
   // Check authentication status
   const checkAuth = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/auth/current-user', {
+      const { data } = await axios.get('https://hackathon-hub-backend.onrender.com/auth/current-user', {
         withCredentials: true
       });
-      
+
       if (data.isAuthenticated) {
         setUser(data.user);
       } else {
@@ -37,13 +37,13 @@ const AuthProvider = ({ children }) => {
 
   // Initiate Google login
   const login = () => {
-    window.location.href = 'http://localhost:8080/auth/google';
+    window.location.href = 'https://hackathon-hub-backend.onrender.com/auth/google';
   };
 
   // Handle logout
   const logout = async () => {
     try {
-      await axios.get('http://localhost:8080/auth/logout', {
+      await axios.get('https://hackathon-hub-backend.onrender.com/auth/logout', {
         withCredentials: true
       });
       setUser(null);

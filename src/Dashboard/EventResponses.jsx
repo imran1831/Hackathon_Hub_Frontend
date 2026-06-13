@@ -15,17 +15,17 @@
 //     const fetchData = async () => {
 //       setIsLoading(true);
 //       setError(null);
-      
+
 //       try {
 //         const [resResponse, statsResponse] = await Promise.all([
-//           axios.get(`http://localhost:8080/api/events/${eventId}/responses`),
-//           axios.get(`http://localhost:8080/api/events/${eventId}/responses/stats`, {
+//           axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/responses`),
+//           axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/responses/stats`, {
 //             validateStatus: (status) => status < 500 // Don't reject for 404
 //           })
 //         ]);
-        
+
 //         setResponses(resResponse.data?.data || []);
-        
+
 //         // Handle stats response differently since it might 404 if no responses exist
 //         if (statsResponse.status === 200) {
 //           setStats(statsResponse.data?.data || {
@@ -88,7 +88,7 @@
 //   return (
 //     <div className="event-responses-container">
 //       <h2>Event Responses</h2>
-      
+
 //       <div className="tabs">
 //         <button 
 //           className={`tab-button ${activeTab === 'responses' ? 'active' : ''}`}
@@ -117,7 +117,7 @@
 //                     Duration: {response.metadata?.duration || 'N/A'}s
 //                   </span>
 //                 </div>
-                
+
 //                 {response.formId && (
 //                   <div className="form-info">
 //                     <h4>Form: {response.formId.title}</h4>
@@ -219,14 +219,14 @@ const EventResponses = () => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
-        const response = await axios.get(`http://localhost:8080/api/events/${eventId}/responses`);
+        const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/responses`);
         setResponses(response.data?.data || []);
       } catch (err) {
-        setError(err.response?.data?.message || 
-                err.message || 
-                'Failed to load response data');
+        setError(err.response?.data?.message ||
+          err.message ||
+          'Failed to load response data');
         console.error('Fetch error:', err);
       } finally {
         setIsLoading(false);
@@ -262,7 +262,7 @@ const EventResponses = () => {
       <div className="error-container">
         <h3>Error Loading Data</h3>
         <p>{error}</p>
-        <button 
+        <button
           className="retry-button"
           onClick={() => window.location.reload()}
         >
@@ -275,12 +275,12 @@ const EventResponses = () => {
   return (
     <div className="event-responses-container">
       <h2>Event Responses</h2>
-      
+
       {responses.length > 0 ? (
         <div className="responses-list">
           {responses.map((response) => (
             <div key={response._id} className="response-card">
-              <div 
+              <div
                 className="response-header"
                 onClick={() => toggleResponse(response._id)}
               >
@@ -292,14 +292,14 @@ const EventResponses = () => {
                   {expandedResponse === response._id ? '−' : '+'}
                 </button>
               </div>
-              
+
               {expandedResponse === response._id && (
                 <div className="response-details">
                   <div className="metadata">
                     <span>Device: {response.metadata?.deviceType || 'Unknown'}</span>
                     <span>Duration: {response.metadata?.duration || 'N/A'}s</span>
                   </div>
-                  
+
                   {response.formId && (
                     <div className="form-info">
                       <h4>Form: {response.formId.title}</h4>

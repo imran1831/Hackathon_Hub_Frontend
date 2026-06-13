@@ -17,7 +17,7 @@ const EditTicket = () => {
   useEffect(() => {
     const fetchTicketData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/ticket/${ticketId}`);
+        const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/ticket/${ticketId}`);
         const ticketData = response.data; // Extract the ticket data
         setEventId(ticketData.eventId);
 
@@ -88,8 +88,8 @@ const EditTicket = () => {
     };
 
     try {
-      const response = await axios.put(`http://localhost:8080/api/tickets/${ticketId}`, ticketData);
-      navigate("/tickets/"+eventId); // Extract eventId using ticketId
+      const response = await axios.put(`https://hackathon-hub-backend.onrender.com/api/tickets/${ticketId}`, ticketData);
+      navigate("/tickets/" + eventId); // Extract eventId using ticketId
     } catch (error) {
       console.error("Error updating ticket:", error);
       alert("Failed to update ticket. Please try again.");

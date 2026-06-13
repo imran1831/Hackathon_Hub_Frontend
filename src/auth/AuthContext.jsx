@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/current-user', {
+      const { data } = await axios.get('https://hackathon-hub-backend.onrender.com/api/current-user', {
         withCredentials: true
       });
       setUser(data);
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = () => {
     window.open(
-      'http://localhost:8080/auth/google',
+      'https://hackathon-hub-backend.onrender.com/auth/google',
       'Google Login',
       'width=500,height=600'
     );
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await axios.get('http://localhost:8080/logout', { withCredentials: true });
+    await axios.get('https://hackathon-hub-backend.onrender.com/logout', { withCredentials: true });
     setUser(null);
   };
 

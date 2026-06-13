@@ -69,10 +69,10 @@
 //     };
 
 //     try {
-//       const response = await axios.post("http://localhost:8080/api/tickets", ticketData);
+//       const response = await axios.post("https://hackathon-hub-backend.onrender.com/api/tickets", ticketData);
 //       // Navigate to the registration form after ticket creation
 //       navigate(`/create-form/${eventId}`);
-      
+
 //       // Reset form after submission
 //       setTicketName("");
 //       setQuantity(0);
@@ -215,10 +215,10 @@ const CreateTicket = () => {
   // Handle input changes for ticket fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     setFormData(prev => {
       const newData = { ...prev, [name]: value };
-      
+
       // If ticket type changed to free, set all prices to 0
       if (name === "ticketType" && value === "free") {
         newData.domains = newData.domains.map(domain => ({
@@ -226,7 +226,7 @@ const CreateTicket = () => {
           price: 0
         }));
       }
-      
+
       return newData;
     });
   };
@@ -234,14 +234,14 @@ const CreateTicket = () => {
   // Handle domain field changes
   const handleDomainChange = (index, e) => {
     const { name, value } = e.target;
-    
+
     setFormData(prev => {
       const newDomains = [...prev.domains];
-      newDomains[index] = { 
-        ...newDomains[index], 
-        [name]: name === "price" ? (value === "" ? "" : Number(value)) : value 
+      newDomains[index] = {
+        ...newDomains[index],
+        [name]: name === "price" ? (value === "" ? "" : Number(value)) : value
       };
-      
+
       return { ...prev, domains: newDomains };
     });
   };
@@ -251,10 +251,10 @@ const CreateTicket = () => {
     setFormData(prev => ({
       ...prev,
       domains: [
-        ...prev.domains, 
-        { 
-          domainName: "", 
-          price: prev.ticketType === "free" ? 0 : "" 
+        ...prev.domains,
+        {
+          domainName: "",
+          price: prev.ticketType === "free" ? 0 : ""
         }
       ]
     }));
@@ -263,7 +263,7 @@ const CreateTicket = () => {
   // Remove domain field
   const removeDomain = (index) => {
     if (formData.domains.length <= 1) return;
-    
+
     setFormData(prev => ({
       ...prev,
       domains: prev.domains.filter((_, i) => i !== index)
@@ -276,12 +276,12 @@ const CreateTicket = () => {
       setError("Ticket name is required");
       return false;
     }
-    
+
     if (!formData.quantity || Number(formData.quantity) <= 0) {
       setError("Quantity must be greater than 0");
       return false;
     }
-    
+
     if (formData.ticketType === "paid") {
       for (const domain of formData.domains) {
         if (!domain.domainName.trim()) {
@@ -294,7 +294,7 @@ const CreateTicket = () => {
         }
       }
     }
-    
+
     setError("");
     return true;
   };
@@ -302,17 +302,17 @@ const CreateTicket = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!user) {
       setError("Please login to create tickets");
       navigate('/login', { state: { from: `/create-ticket/${eventId}` } });
       return;
     }
-    
+
     if (!validateForm()) return;
-    
+
     setLoading(true);
-    
+
     try {
       const ticketData = {
         eventId,
@@ -328,11 +328,11 @@ const CreateTicket = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/api/tickets", 
-        ticketData, 
+        "https://hackathon-hub-backend.onrender.com/api/tickets",
+        ticketData,
         { withCredentials: true }
       );
-      
+
       navigate(`/create-form/${eventId}`);
     } catch (error) {
       console.error("Ticket creation error:", error);
@@ -354,9 +354,9 @@ const CreateTicket = () => {
   return (
     <div className="create-ticket-container">
       <h2>Create Ticket for Event</h2>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Ticket Name *</label>
@@ -436,8 +436,8 @@ const CreateTicket = () => {
                 </button>
               </div>
             ))}
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="add-domain-btn"
               onClick={addDomain}
             >
@@ -447,8 +447,8 @@ const CreateTicket = () => {
         )}
 
         <div className="form-actions">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-btn"
             disabled={loading}
           >

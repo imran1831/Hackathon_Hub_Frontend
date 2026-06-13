@@ -19,7 +19,7 @@
 //     const fetchTickets = async () => {
 //       try {
 //         const response = await axios.get(
-//           `http://localhost:8080/api/tickets/${eventId}`
+//           `https://hackathon-hub-backend.onrender.com/api/tickets/${eventId}`
 //         );
 //         setTickets(response.data);
 //         setTicketId(response.data[0]._id);
@@ -32,7 +32,7 @@
 
 //     const fetchForms = async () => {
 //         try {
-//           const response = await axios.get(`http://localhost:8080/api/events/${eventId}/forms`);
+//           const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms`);
 //           setForms(response.data.data[0]);
 //           setFormId(response.data.data[0]._id)
 //           setLoading(false);
@@ -45,14 +45,14 @@
 //       const fetchEventAndUser = async () => {
 //         try {
 //           // Fetch current user with credentials
-//           const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+//           const userResponse = await fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', {
 //             credentials: 'include'
 //           });
 //           const userData = await userResponse.json();
 //           setCurrentUser(userData.isAuthenticated ? userData.user.email : null);
-  
+
 //           // Fetch event
-//           const eventResponse = await fetch(`http://localhost:8080/api/event/${eventId}`);
+//           const eventResponse = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${eventId}`);
 //           if (!eventResponse.ok) {
 //             throw new Error("Event not found");
 //           }
@@ -64,7 +64,7 @@
 //           setLoading(false);
 //         }
 //       };
-  
+
 //     fetchEventAndUser();
 //     fetchForms();
 //     fetchTickets();
@@ -76,7 +76,7 @@
 
 //   const handleDelete = async () => {
 //     try {
-//       const response = await fetch(`http://localhost:8080/api/event/${id}`, {
+//       const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${id}`, {
 //         method: "DELETE",
 //         credentials: "include",
 //       });
@@ -207,10 +207,10 @@ const Dashboard = () => {
       try {
         // Fetch all data in parallel
         const [userResponse, eventResponse, ticketsResponse, formsResponse] = await Promise.all([
-          fetch('http://localhost:8080/auth/current-user', { credentials: 'include' }),
-          fetch(`http://localhost:8080/api/event/${eventId}`),
-          axios.get(`http://localhost:8080/api/tickets/${eventId}`),
-          axios.get(`http://localhost:8080/api/events/${eventId}/forms`)
+          fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', { credentials: 'include' }),
+          fetch(`https://hackathon-hub-backend.onrender.com/api/event/${eventId}`),
+          axios.get(`https://hackathon-hub-backend.onrender.com/api/tickets/${eventId}`),
+          axios.get(`https://hackathon-hub-backend.onrender.com/api/events/${eventId}/forms`)
         ]);
 
         // Process user data
@@ -248,7 +248,7 @@ const Dashboard = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/event/${eventId}`, {
+      const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${eventId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -318,8 +318,8 @@ const Dashboard = () => {
           {tickets.length === 0 ? (
             <div className="no-tickets">
               <p>No tickets found for this event</p>
-              <button 
-                onClick={() => navigate(`/edit/${eventId}`)} 
+              <button
+                onClick={() => navigate(`/edit/${eventId}`)}
                 className="action-button create-ticket"
               >
                 Create Tickets
@@ -353,13 +353,13 @@ const Dashboard = () => {
         <section className="actions-section">
           <h2>Event Management</h2>
           <div className="action-buttons">
-            <button 
-              onClick={() => navigate(`/edit/${eventId}`)} 
+            <button
+              onClick={() => navigate(`/edit/${eventId}`)}
               className="action-button edit"
             >
               Edit Event Details
             </button>
-            
+
             {tickets.length > 0 && (
               <button className="action-button edit">
                 <Link to={`/edit-ticket/${ticketId}`}>
@@ -367,7 +367,7 @@ const Dashboard = () => {
                 </Link>
               </button>
             )}
-            
+
             {formId ? (
               <button className="action-button form">
                 <Link to={`/events/${eventId}/edit-form/${formId}`}>
@@ -381,17 +381,17 @@ const Dashboard = () => {
                 </Link>
               </button>
             )}
-            
+
             <button className="action-button payments">
               <Link to={`/payments/${eventId}`}>View Payments</Link>
             </button>
-            
+
             <button className="action-button responses">
               <Link to={`/responses/${eventId}`}>View Responses</Link>
             </button>
-            
-            <button 
-              onClick={confirmDelete} 
+
+            <button
+              onClick={confirmDelete}
               className="action-button delete"
             >
               Delete Event

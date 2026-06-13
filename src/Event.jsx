@@ -20,7 +20,7 @@
 //   useEffect(() => {
 //     const fetchEvent = async () => {
 //       try {
-//         const response = await fetch(`http://localhost:8080/api/event/${id}`);
+//         const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${id}`);
 //         if (!response.ok) {
 //           throw new Error("Event not found");
 //         }
@@ -38,7 +38,7 @@
 
 //   const handleDelete = async () => {
 //     try {
-//       const response = await fetch(`http://localhost:8080/api/event/${id}`, {
+//       const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${id}`, {
 //         method: "DELETE",
 //       });
 
@@ -183,14 +183,14 @@ const Event = () => {
     const fetchEventAndUser = async () => {
       try {
         // Fetch current user with credentials
-        const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+        const userResponse = await fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', {
           credentials: 'include'
         });
         const userData = await userResponse.json();
         setCurrentUser(userData.isAuthenticated ? userData.user : null);
 
         // Fetch event
-        const eventResponse = await fetch(`http://localhost:8080/api/event/${id}`);
+        const eventResponse = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${id}`);
         if (!eventResponse.ok) {
           throw new Error("Event not found");
         }
@@ -208,7 +208,7 @@ const Event = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/event/${id}`, {
+      const response = await fetch(`https://hackathon-hub-backend.onrender.com/api/event/${id}`, {
         method: "DELETE",
         credentials: 'include'
       });
@@ -242,9 +242,9 @@ const Event = () => {
   return (
     <div className="event-container">
       {/* Hero Section */}
- 
+
       <EventHeader event={event} />
-      
+
 
       {/* Event Details */}
       <EventDetails event={event} />
@@ -284,7 +284,7 @@ const Event = () => {
       {event.faqs && event.faqs.length > 0 && <Faqs faqs={event.faqs} />}
 
       {/* Contact */}
-      <EventContact queries={event.queries} event={event}/>
+      <EventContact queries={event.queries} event={event} />
 
     </div>
   );

@@ -23,7 +23,7 @@ const ShowTickets = () => {
     const fetchData = async () => {
       try {
         // First get current user
-        const userResponse = await fetch('http://localhost:8080/auth/current-user', {
+        const userResponse = await fetch('https://hackathon-hub-backend.onrender.com/auth/current-user', {
           credentials: 'include'
         });
         const userData = await userResponse.json();
@@ -31,7 +31,7 @@ const ShowTickets = () => {
         setUserData(userData);
 
         // Check if user is already registered
-        const registrationCheck = await axios.post('http://localhost:8080/api/check-submission', {
+        const registrationCheck = await axios.post('https://hackathon-hub-backend.onrender.com/api/check-submission', {
           eventId,
           username: userData.user.email
         });
@@ -43,16 +43,16 @@ const ShowTickets = () => {
         }
 
         // If not registered, fetch event data
-        const response = await axios.get(`http://localhost:8080/api/event-with-tickets/${eventId}`);
+        const response = await axios.get(`https://hackathon-hub-backend.onrender.com/api/event-with-tickets/${eventId}`);
         setEventData(response.data);
 
         const initialSelections = {};
         const initialQuantities = {};
         let initialTotal = 0;
-        
+
         response.data.tickets.forEach(ticket => {
           initialQuantities[ticket._id] = 1;
-          
+
           if (ticket.ticketType === "paid" && ticket.domains.length === 1 && ticket.quantity - ticket.sold > 0) {
             const domain = ticket.domains[0];
             const key = `${ticket._id}-${domain.domainName}`;
@@ -64,7 +64,7 @@ const ShowTickets = () => {
             initialTotal += domain.price;
           }
         });
-        
+
         setSelectedDomains(initialSelections);
         setTotalAmount(initialTotal);
         setQuantities(initialQuantities);
@@ -89,7 +89,7 @@ const ShowTickets = () => {
   const createRazorpayOrder = async () => {
     try {
       setPaymentLoading(true);
-      const response = await axios.post('http://localhost:8080/api/create-razorpay-order', {
+      const response = await axios.post('https://hackathon-hub-backend.onrender.com/api/create-razorpay-order', {
         amount: totalAmount * 100,
         currency: 'INR',
         receipt: `order_${eventId}_${Date.now()}`
@@ -116,10 +116,10 @@ const ShowTickets = () => {
       name: eventData.event.title,
       description: 'Ticket Purchase',
       order_id: orderId,
-      handler: async function(response) {
+      handler: async function (response) {
         try {
           const verifyResponse = await axios.post(
-            'http://localhost:8080/api/verify-payment', 
+            'https://hackathon-hub-backend.onrender.com/api/verify-payment',
             {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
@@ -159,7 +159,7 @@ const ShowTickets = () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
-    rzp.on('payment.failed', function(response) {
+    rzp.on('payment.failed', function (response) {
       alert(`Payment failed: ${response.error.description}`);
       setPaymentLoading(false);
     });
@@ -171,12 +171,12 @@ const ShowTickets = () => {
       const currentQuantity = prev[ticketId] || 1;
       const ticket = eventData?.tickets.find(t => t._id === ticketId);
       const availableQuantity = ticket ? ticket.quantity - ticket.sold : 1;
-      
+
       const newQuantity = Math.max(
-        1, 
+        1,
         Math.min(currentQuantity + change, availableQuantity)
       );
-      
+
       let newTotal = 0;
       Object.entries(selectedDomains).forEach(([key, domain]) => {
         const domainTicketId = key.split('-')[0];
@@ -184,7 +184,7 @@ const ShowTickets = () => {
         newTotal += domain.price * quantity;
       });
       setTotalAmount(newTotal);
-      
+
       return {
         ...prev,
         [ticketId]: newQuantity
@@ -222,13 +222,13 @@ const ShowTickets = () => {
   // Handle registration for free tickets
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:8080/api/quantities', {
+      await axios.post('https://hackathon-hub-backend.onrender.com/api/quantities', {
         eventId,
         username: user,
         quantity: Object.values(quantities).reduce((sum, qty) => sum + qty, 0)
       });
 
-      const response = await axios.post('http://localhost:8080/api/register-free', {
+      const response = await axios.post('https://hackathon-hub-backend.onrender.com/api/register-free', {
         eventId,
         tickets: eventData.tickets.map(ticket => ({
           ticketId: ticket._id,
@@ -251,7 +251,7 @@ const ShowTickets = () => {
 
   if (loading) return <div className="loading-message">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
-  
+
   if (isRegistered) {
     return (
       <div className="already-registered-container">
@@ -270,7 +270,7 @@ const ShowTickets = () => {
   return (
     <div className="tickets-container">
       <h2>{eventData.event.title}</h2>
-      
+
       {allTicketsSoldOut() ? (
         <div className="sold-out-message">
           <h3>Tickets Unavailable</h3>
@@ -281,14 +281,14 @@ const ShowTickets = () => {
       ) : (
         <div className="tickets-list">
           {eventData.tickets.map((ticket) => (
-            <div 
-              key={ticket._id} 
+            <div
+              key={ticket._id}
               className={`ticket-card ${ticket.quantity - ticket.sold <= 0 ? 'sold-out' : ''}`}
             >
               {ticket.quantity - ticket.sold <= 0 && (
                 <div className="ticket-sold-out-banner">Sold Out</div>
               )}
-              
+
               <h3>{ticket.ticketName}</h3>
               <p>
                 <strong>Type:</strong> {ticket.ticketType}
@@ -304,14 +304,14 @@ const ShowTickets = () => {
               {eventData.event.type === "event" && ticket.quantity - ticket.sold > 0 && (
                 <div className="quantity-selector">
                   <label>Quantity:</label>
-                  <button 
+                  <button
                     onClick={() => handleQuantityChange(ticket._id, -1)}
                     disabled={quantities[ticket._id] <= 1}
                   >
                     -
                   </button>
                   <span>{quantities[ticket._id] || 1}</span>
-                  <button 
+                  <button
                     onClick={() => handleQuantityChange(ticket._id, 1)}
                     disabled={quantities[ticket._id] >= ticket.quantity - ticket.sold}
                   >
@@ -328,7 +328,7 @@ const ShowTickets = () => {
                       const key = `${ticket._id}-${domain.domainName}`;
                       const isSingleDomain = ticket.domains.length === 1;
                       const isSelected = !!selectedDomains[key] || isSingleDomain;
-                      
+
                       if (isSingleDomain && !selectedDomains[key]) {
                         setSelectedDomains(prev => ({
                           ...prev,
@@ -349,8 +349,8 @@ const ShowTickets = () => {
                               checked={isSelected}
                               onChange={() =>
                                 handleDomainSelection(
-                                  ticket._id, 
-                                  domain.domainName, 
+                                  ticket._id,
+                                  domain.domainName,
                                   domain.price,
                                   isSingleDomain
                                 )
@@ -381,8 +381,8 @@ const ShowTickets = () => {
           totalAmount > 0 && (
             <div className="payment-section">
               <h3>Total Amount to Pay: ₹{totalAmount}</h3>
-              <button 
-                onClick={handlePayment} 
+              <button
+                onClick={handlePayment}
                 className="payment-button"
                 disabled={paymentLoading}
               >
